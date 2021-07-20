@@ -10,7 +10,7 @@ const io = require("socket.io")(httpServer, {
 const port = 7000;
 
 io.on("connection", socket => {
-    console.log("Someone Connected Their Socket ID is " + socket.id);
+    console.log("Someone Connected,Their Socket ID is " + socket.id);
     socket.on("disconnect", () => {
         console.log(`${socket.id} Disconnected`);
     })
