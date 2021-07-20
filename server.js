@@ -11,9 +11,14 @@ const port = 7000;
 
 io.on("connection", socket => {
     console.log("Someone Connected,Their Socket ID is " + socket.id);
+    socket.on("new_user", (username) => {
+        console.log("UserName :", username)
+
+    })
+
     socket.on("disconnect", () => {
         console.log(`${socket.id} Disconnected`);
-    })
+    });
 })
 
 
