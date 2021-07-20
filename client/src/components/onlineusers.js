@@ -1,21 +1,27 @@
 const OnlineUsers = (props) => {
-  const { onUserSelect } = props;
+  const { onUserSelect, users, username } = props;
   return (
     <>
       <div className="online-users-header">
         <div style={{ margin: "5px 10px" }}>Online Users</div>
       </div>
       <ul className="users-list">
-        <li
-          onClick={() => {
-            onUserSelect("regrests");
-          }}
-        >
-          <span style={{ textTransform: "capitalize" }}>
-            person I am talking to
-          </span>
-          <span className="new-message-count">3</span>
-        </li>
+        {users &&
+          Object.keys(users).map((user, index) => (
+            <>
+              {user !== username && (
+                <li
+                  key={user}
+                  onClick={() => {
+                    onUserSelect("regrests");
+                  }}
+                >
+                  <span style={{ textTransform: "capitalize" }}>{user}</span>
+                  <span className="new-message-count">3</span>
+                </li>
+              )}
+            </>
+          ))}
       </ul>
     </>
   );

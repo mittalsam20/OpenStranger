@@ -11,13 +11,13 @@ const App = () => {
   // -----------------------------------------------STATES-----------------------------------
   const [step, setStep] = useState(0);
   const [username, setUsername] = useState("");
+  const [users, setUsers] = useState({});
 
   // ------------------------------------------------FUNCTIONS-----------------------------------------
 
   const onCreateUser = () => {
     console.log(username);
     socket.emit("new_user", username);
-
     setStep((prevStep) => prevStep + 1);
   };
 
@@ -26,6 +26,13 @@ const App = () => {
   };
 
   useEffect(() => {}, [username]);
+
+  useEffect(() => {
+    socket.on("all_users", (users) => {
+      console.log({ users });
+      setUsers(users);
+    });
+  }, []);
 
   // --------------------------------------------RETURN------------------------------------------
   return (
@@ -48,7 +55,13 @@ const App = () => {
           )}
 
           {/* Show all Online Users */}
-          {step === 1 && <OnlineUsers onUserSelect={onUserSelect} />}
+          {step === 1 && (
+            <OnlineUsers
+              onUserSelect={onUserSelect}
+              users={users}
+              username={username}
+            />
+          )}
 
           {/* select user and switch to chat window */}
           {step === 2 && <MessagesControl />}
