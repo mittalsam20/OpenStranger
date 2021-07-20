@@ -20,12 +20,17 @@ io.on("connection", socket => {
 
     // -----------------------USER CONNECTION----------------------------
     socket.on("new_user", (username) => {
-        console.log("UserName :", username)
-        users[username] = socket.id;
-        //Notification Whenever A New User Joins
-        io.emit("all_users", users);
+            console.log("UserName :", username)
+            users[username] = socket.id;
+            //Notification Whenever A New User Joins
+            io.emit("all_users", users);
+        })
+        // -----------------------SEND MESSAGE-------------------------------
+    socket.on("send_message", (data) => {
+        console.log(data);
+        const socketid = users[data.receiver];
+        io.to(socketid).emit("new_message", data);
     })
-
 
     // -----------------------USER DISCONNECTED----------------------------
     socket.on("disconnect", () => {

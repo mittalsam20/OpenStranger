@@ -1,4 +1,5 @@
-const MessagesControl = () => {
+const MessagesControl = (props) => {
+  const { sendMessage, onChange, value } = props;
   return (
     <div>
       <div className="online-users-header">
@@ -14,8 +15,14 @@ const MessagesControl = () => {
           </li>
         </ul>
       </div>
-      <form className="message-control">
-        <textarea name="" id="" placeholder="Type something..!!" />
+      <form className="message-control" onSubmit={sendMessage}>
+        <textarea
+          value={value}
+          onChange={onChange}
+          name=""
+          id=""
+          placeholder="Type something..!!"
+        />
 
         <div className="file-input-container">
           <input type="file" id="hidden-file" />

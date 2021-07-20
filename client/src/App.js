@@ -11,18 +11,38 @@ const App = () => {
   // -----------------------------------------------STATES-----------------------------------
   const [step, setStep] = useState(0);
   const [username, setUsername] = useState("");
+  const [receiver, setReceiver] = useState("");
   const [users, setUsers] = useState({});
-
+  const [message, setMessage] = useState("");
+  const [media, setMedia] = useState(null);
+  const [avatar, setAvatar] = useState("");
   // ------------------------------------------------FUNCTIONS-----------------------------------------
 
   const onCreateUser = () => {
     console.log(username);
     socket.emit("new_user", username);
+    const picpath = `images/users_head/${Math.floor(Math.random() * 8)}.png`;
+    setAvatar(picpath);
     setStep((prevStep) => prevStep + 1);
   };
 
-  const onUserSelect = (key) => {
+  const onUserSelect = (username) => {
+    setReceiver(username);
     setStep((prevStep) => prevStep + 1);
+  };
+
+  const sendMessage = (e) => {
+    e.preventDefault();
+    console.log(message);
+    const data = {
+      sender: username,
+      receiver,
+      message,
+      media,
+      avatar,
+    };
+
+    socket.emit("send_message", data);
   };
 
   useEffect(() => {}, [username]);
@@ -31,6 +51,10 @@ const App = () => {
     socket.on("all_users", (users) => {
       console.log({ users });
       setUsers(users);
+    });
+
+    socket.on("new_message", (data) => {
+      console.log(data);
     });
   }, []);
 
@@ -64,7 +88,15 @@ const App = () => {
           )}
 
           {/* select user and switch to chat window */}
-          {step === 2 && <MessagesControl />}
+          {step === 2 && (
+            <MessagesControl
+              sendMessage={sendMessage}
+              value={message}
+              onChange={(e) => {
+                setMessage(e.target.value);
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@ const OnlineUsers = (props) => {
                 <li
                   key={user}
                   onClick={() => {
-                    onUserSelect("regrests");
+                    onUserSelect(user);
                   }}
                 >
                   <span style={{ textTransform: "capitalize" }}>{user}</span>
