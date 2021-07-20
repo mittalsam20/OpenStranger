@@ -71,20 +71,32 @@ const App = () => {
                 <ul>
                   <li>
                     <div className="user-pic">
-                      <img src="/images/users_head/1.png" alt="" srcset="" />
+                      <img
+                        src="/images/users_head/1.png"
+                        alt="user-icon"
+                        srcset=""
+                      />
                     </div>
+                    <div className="message-text">Your Message</div>
                   </li>
                 </ul>
               </div>
               <form className="message-control">
                 <textarea name="" id="" placeholder="Type something..!!" />
 
-                <div>
-                  <input type="file" />
+                <div className="file-input-container">
+                  <input type="file" id="hidden-file" />
+                  <label htmlFor="hidden-file">
+                    <img
+                      src="images/paper-clip.png"
+                      alt="attachment-icon"
+                      width="20"
+                    />
+                  </label>
                 </div>
                 <button>
-                  <img src="" alt="" />
-                  <span>Send</span>
+                  <img src="images/send.png" alt="send-icon" />
+                  <span style={{ display: "inline-block" }}>Send</span>
                 </button>
               </form>
             </>
