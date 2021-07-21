@@ -209,7 +209,7 @@
     margin: 0 5px;
 }
 
-.attachement-display {
+.attachment-display {
     display: flex;
     align-items: center;
     box-sizing: border-box;
@@ -222,7 +222,7 @@
     font-weight: 600;
     font-size: 14px;
     display: inline-block;
-    margin: 0 5px;
+    margin: 0 4px 0 10px;
 }
 
 .remove-attachment {

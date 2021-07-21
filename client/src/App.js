@@ -20,9 +20,16 @@ const App = () => {
   const receiverRef = useRef(null);
   // ------------------------------------------------FUNCTIONS-----------------------------------------
 
+  const gobot = () => {
+    const ele = document.querySelector(".message-area ul");
+    if (ele) {
+      ele.scrollTop = ele.scrollHeight;
+    }
+  };
+
   const onChatClose = () => {
-    receiverRef.current = null;
     setStep(1);
+    receiverRef.current = null;
   };
 
   const sortNames = (username1, username2) => {
@@ -41,7 +48,9 @@ const App = () => {
   const onCreateUser = () => {
     console.log(username);
     socket.emit("new_user", username);
-    const picpath = `images/users_head/${Math.floor(Math.random() * 8)}.png`;
+    const picpath = `images/users_head/${parseInt(
+      Math.floor(Math.random() * 8 + 1)
+    )}.png`;
     setAvatar(picpath);
     setStep((prevStep) => prevStep + 1);
   };
@@ -96,6 +105,15 @@ const App = () => {
   };
   // -------------------------------------------------------------UseEffects---------------------------------
   useEffect(() => {}, [username]);
+
+  useEffect(() => {
+    const key = sortNames(username, receiver);
+    if (key in allmessage) {
+      if (allmessage[key].length > 0) {
+        gobot();
+      }
+    }
+  }, [allmessage]);
 
   useEffect(() => {
     updateview();
