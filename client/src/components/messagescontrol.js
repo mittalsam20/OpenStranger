@@ -1,9 +1,11 @@
 const MessagesControl = (props) => {
-  const { sendMessage, onChange, value } = props;
+  const { sendMessage, onChange, value, receiver } = props;
   return (
     <div>
       <div className="online-users-header">
-        <div style={{ margin: "5px 10px" }}>name of the user i am talik to</div>
+        <div style={{ margin: "5px 10px", textTransform: "capitalize" }}>
+          {receiver}
+        </div>
       </div>
       <div className="message-area">
         <ul>

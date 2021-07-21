@@ -1,6 +1,6 @@
 import "./App.css";
 import { io } from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CreateUser from "./components/createuser";
 import OnlineUsers from "./components/onlineusers";
 import MessagesControl from "./components/messagescontrol";
@@ -14,9 +14,15 @@ const App = () => {
   const [receiver, setReceiver] = useState("");
   const [users, setUsers] = useState({});
   const [message, setMessage] = useState("");
+  const [allmessage, setAllmessage] = useState({});
   const [media, setMedia] = useState(null);
   const [avatar, setAvatar] = useState("");
+  const receiverRef = useRef(null);
   // ------------------------------------------------FUNCTIONS-----------------------------------------
+
+  const sortNames = (username1, username2) => {
+    return [username1, username2].sort().join("-");
+  };
 
   const onCreateUser = () => {
     console.log(username);
@@ -28,6 +34,7 @@ const App = () => {
 
   const onUserSelect = (username) => {
     setReceiver(username);
+    receiverRef.current = username;
     setStep((prevStep) => prevStep + 1);
   };
 
@@ -43,6 +50,17 @@ const App = () => {
     };
 
     socket.emit("send_message", data);
+    const key = sortNames(username, receiver);
+
+    //If chat has already happened
+    if (key in allmessage) {
+      allmessage[key].push(data);
+    } else {
+      //if brand new chatting begins
+      allmessage[key] = [data];
+    }
+    setAllmessage({ ...allmessage });
+    console.log(allmessage);
   };
 
   useEffect(() => {}, [username]);
@@ -55,9 +73,21 @@ const App = () => {
 
     socket.on("new_message", (data) => {
       console.log(data);
+      setAllmessage((prevAllmessage) => {
+        const messages = prevAllmessage;
+        const key = sortNames(username, receiverRef.current);
+        if (key in messages) {
+          messages[key] = [...messages[key], data];
+        } else {
+          messages[key] = [data];
+        }
+        return { ...messages };
+      });
     });
   }, []);
 
+  //----------------------------
+  console.log(allmessage);
   // --------------------------------------------RETURN------------------------------------------
   return (
     <div className="App">
@@ -92,6 +122,7 @@ const App = () => {
             <MessagesControl
               sendMessage={sendMessage}
               value={message}
+              receiver={receiver}
               onChange={(e) => {
                 setMessage(e.target.value);
               }}
