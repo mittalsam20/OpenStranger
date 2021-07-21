@@ -25,11 +25,28 @@ const MessagesControl = (props) => {
           {messages &&
             messages.length > 0 &&
             messages.map((msg, index) => (
-              <li>
+              <li
+                style={{
+                  flexDirection:
+                    username === msg.receiver ? "row" : "row-reverse",
+                }}
+              >
                 <div className="user-pic">
                   <img src={avatar} alt="user-icon" srcset="" />
                 </div>
-                <div className="message-text">{msg.message}</div>
+
+                {msg.media && msg.media.image && (
+                  <div>
+                    <img
+                      src={msg.media.content}
+                      alt={`${username} sended an canvas`}
+                      className="image-container"
+                    />
+                  </div>
+                )}
+                {msg.message !== "" && (
+                  <div className="message-text">{msg.message}</div>
+                )}
               </li>
             ))}
         </ul>

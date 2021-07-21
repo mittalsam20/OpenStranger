@@ -61,6 +61,10 @@ const App = () => {
     }
     setAllmessage({ ...tempAllMessage });
     console.log(allmessage);
+    if (media !== null) {
+      setMedia(null);
+    }
+    setMessage("");
   };
   // -------------------------------------------------------------UseEffects---------------------------------
   useEffect(() => {}, [username]);
@@ -127,6 +131,7 @@ const App = () => {
               sortNames={sortNames}
               username={username}
               avatar={avatar}
+              media={media}
               setMedia={setMedia}
               onChange={(e) => {
                 setMessage(e.target.value);
