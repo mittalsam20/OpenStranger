@@ -24,6 +24,15 @@ const App = () => {
     return [username1, username2].sort().join("-");
   };
 
+  const checkMessages = (receiver) => {
+    const key = sortNames(username, receiver);
+    let unseenmessages = [];
+    if (key in allmessage) {
+      unseenmessages = allmessage[key].filter((msg) => !msg.view);
+    }
+    return unseenmessages.length;
+  };
+
   const onCreateUser = () => {
     console.log(username);
     socket.emit("new_user", username);
@@ -37,12 +46,14 @@ const App = () => {
     receiverRef.current = username;
     setStep((prevStep) => prevStep + 1);
   };
+
   // ---------------------------------------------------SEND MESSAGE FUNCTION--------------------------
   const sendMessage = (e) => {
     e.preventDefault();
     console.log(message);
     const data = {
       sender: username,
+      view: false,
       receiver,
       message,
       media,
@@ -54,10 +65,10 @@ const App = () => {
     const tempAllMessage = { ...allmessage };
     //If chat has already happened
     if (key in tempAllMessage) {
-      tempAllMessage[key] = [...tempAllMessage[key], data];
+      tempAllMessage[key] = [...tempAllMessage[key], { ...data, view: true }];
     } else {
       //if brand new chatting begins
-      tempAllMessage[key] = [data];
+      tempAllMessage[key] = [{ ...data, view: true }];
     }
     setAllmessage({ ...tempAllMessage });
     console.log(allmessage);
@@ -118,6 +129,7 @@ const App = () => {
               onUserSelect={onUserSelect}
               users={users}
               username={username}
+              checkMessages={checkMessages}
             />
           )}
 

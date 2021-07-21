@@ -1,5 +1,5 @@
 const OnlineUsers = (props) => {
-  const { onUserSelect, users, username } = props;
+  const { onUserSelect, users, username, checkMessages } = props;
   return (
     <>
       <div className="online-users-header">
@@ -17,7 +17,11 @@ const OnlineUsers = (props) => {
                   }}
                 >
                   <span style={{ textTransform: "capitalize" }}>{user}</span>
-                  <span className="new-message-count">3</span>
+                  {checkMessages(user) !== 0 && (
+                    <span className="new-message-count">
+                      {checkMessages(user)}
+                    </span>
+                  )}
                 </li>
               )}
             </>
