@@ -37,7 +37,7 @@ const App = () => {
     receiverRef.current = username;
     setStep((prevStep) => prevStep + 1);
   };
-
+  // ---------------------------------------------------SEND MESSAGE FUNCTION--------------------------
   const sendMessage = (e) => {
     e.preventDefault();
     console.log(message);
@@ -51,18 +51,18 @@ const App = () => {
 
     socket.emit("send_message", data);
     const key = sortNames(username, receiver);
-
+    const tempAllMessage = { ...allmessage };
     //If chat has already happened
-    if (key in allmessage) {
-      allmessage[key].push(data);
+    if (key in tempAllMessage) {
+      tempAllMessage[key] = [...tempAllMessage[key], data];
     } else {
       //if brand new chatting begins
-      allmessage[key] = [data];
+      tempAllMessage[key] = [data];
     }
-    setAllmessage({ ...allmessage });
+    setAllmessage({ ...tempAllMessage });
     console.log(allmessage);
   };
-
+  // -------------------------------------------------------------UseEffects---------------------------------
   useEffect(() => {}, [username]);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const App = () => {
     socket.on("new_message", (data) => {
       console.log(data);
       setAllmessage((prevAllmessage) => {
-        const messages = prevAllmessage;
+        const messages = { ...prevAllmessage };
         const key = sortNames(data.sender, data.receiver);
         if (key in messages) {
           messages[key] = [...messages[key], data];
@@ -127,6 +127,7 @@ const App = () => {
               sortNames={sortNames}
               username={username}
               avatar={avatar}
+              setMedia={setMedia}
               onChange={(e) => {
                 setMessage(e.target.value);
               }}

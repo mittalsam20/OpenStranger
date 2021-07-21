@@ -8,6 +8,7 @@ const MessagesControl = (props) => {
     sortNames,
     username,
     avatar,
+    setMedia,
   } = props;
 
   const messages = allmessage ? allmessage[sortNames(username, receiver)] : [];
@@ -43,7 +44,27 @@ const MessagesControl = (props) => {
         />
 
         <div className="file-input-container">
-          <input type="file" id="hidden-file" />
+          <input
+            type="file"
+            id="hidden-file"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              const reader = new FileReader();
+              reader.readAsDataURL(file);
+              reader.onload = () => {
+                console.log(reader.result);
+                setMedia({
+                  image: true,
+                  content: reader.result,
+                  name: file.name,
+                });
+              };
+              reader.onerror = (err) => {
+                console.log(err);
+              };
+              console.log(file);
+            }}
+          />
           <label htmlFor="hidden-file">
             <img src="images/paper-clip.png" alt="attachment-icon" width="20" />
           </label>
