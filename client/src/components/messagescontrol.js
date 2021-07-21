@@ -1,5 +1,17 @@
 const MessagesControl = (props) => {
-  const { sendMessage, onChange, value, receiver } = props;
+  const {
+    sendMessage,
+    onChange,
+    value,
+    receiver,
+    allmessage,
+    sortNames,
+    username,
+    avatar,
+  } = props;
+
+  const messages = allmessage ? allmessage[sortNames(username, receiver)] : [];
+
   return (
     <div>
       <div className="online-users-header">
@@ -9,12 +21,16 @@ const MessagesControl = (props) => {
       </div>
       <div className="message-area">
         <ul>
-          <li>
-            <div className="user-pic">
-              <img src="/images/users_head/1.png" alt="user-icon" srcset="" />
-            </div>
-            <div className="message-text">Your Message</div>
-          </li>
+          {messages &&
+            messages.length > 0 &&
+            messages.map((msg, index) => (
+              <li>
+                <div className="user-pic">
+                  <img src={avatar} alt="user-icon" srcset="" />
+                </div>
+                <div className="message-text">{msg.message}</div>
+              </li>
+            ))}
         </ul>
       </div>
       <form className="message-control" onSubmit={sendMessage}>

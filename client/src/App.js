@@ -75,7 +75,7 @@ const App = () => {
       console.log(data);
       setAllmessage((prevAllmessage) => {
         const messages = prevAllmessage;
-        const key = sortNames(username, receiverRef.current);
+        const key = sortNames(data.sender, data.receiver);
         if (key in messages) {
           messages[key] = [...messages[key], data];
         } else {
@@ -123,6 +123,10 @@ const App = () => {
               sendMessage={sendMessage}
               value={message}
               receiver={receiver}
+              allmessage={allmessage}
+              sortNames={sortNames}
+              username={username}
+              avatar={avatar}
               onChange={(e) => {
                 setMessage(e.target.value);
               }}
