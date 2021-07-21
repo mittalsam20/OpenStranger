@@ -20,6 +20,11 @@ const App = () => {
   const receiverRef = useRef(null);
   // ------------------------------------------------FUNCTIONS-----------------------------------------
 
+  const onChatClose = () => {
+    receiverRef.current = null;
+    setStep(1);
+  };
+
   const sortNames = (username1, username2) => {
     return [username1, username2].sort().join("-");
   };
@@ -77,8 +82,24 @@ const App = () => {
     }
     setMessage("");
   };
+
+  const updateview = () => {
+    const key = sortNames(username, receiver);
+    if (key in allmessage) {
+      const messages = allmessage[key].map((msg) =>
+        !msg.view ? { ...msg, view: true } : msg
+      );
+
+      allmessage[key] = [...messages];
+      setAllmessage({ ...allmessage });
+    }
+  };
   // -------------------------------------------------------------UseEffects---------------------------------
   useEffect(() => {}, [username]);
+
+  useEffect(() => {
+    updateview();
+  }, [receiver]);
 
   useEffect(() => {
     socket.on("all_users", (users) => {
@@ -88,9 +109,14 @@ const App = () => {
 
     socket.on("new_message", (data) => {
       console.log(data);
+
       setAllmessage((prevAllmessage) => {
         const messages = { ...prevAllmessage };
         const key = sortNames(data.sender, data.receiver);
+        if (receiverRef.current === data.sender) {
+          console.log("inside true cond", receiverRef.current, data.sender);
+          data.view = true;
+        }
         if (key in messages) {
           messages[key] = [...messages[key], data];
         } else {
@@ -145,6 +171,7 @@ const App = () => {
               avatar={avatar}
               media={media}
               setMedia={setMedia}
+              onChatClose={onChatClose}
               onChange={(e) => {
                 setMessage(e.target.value);
               }}
