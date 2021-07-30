@@ -7,7 +7,7 @@ const io = require("socket.io")(httpServer, {
         methods: ["GET", "POST"],
     }
 });
-const port = 7000;
+const port = process.env.PORT || 7000;
 
 const users = {};
 
